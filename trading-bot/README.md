@@ -40,3 +40,13 @@ PYTHONPATH=src python -m tradingbot.backtest_cli WINZ25 5m --csv historico.csv  
 
 Entra na abertura do candle seguinte ao sinal, desconta taxa de 0,1% por lado e, se stop e alvo
 forem tocados no mesmo candle, assume o stop.
+
+## Estrategias candidatas e validacao
+
+`--strategy` aceita `ema_cross` (exemplo, sem vantagem comprovada), `donchian` e `pullback`.
+Use `--split 0.7` para ver treino e **fora da amostra**; so confie numa estrategia que continue
+positiva fora da amostra, com taxas realistas e acima do buy&hold ajustado ao risco.
+
+```bash
+PYTHONPATH=src python -m tradingbot.backtest_cli BTCUSDT 1h --strategy donchian --n 10000 --split 0.7
+```

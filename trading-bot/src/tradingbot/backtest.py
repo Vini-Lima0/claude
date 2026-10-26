@@ -6,9 +6,10 @@ from dataclasses import dataclass
 
 from .models import Candle
 from .risk import position_size
-from .strategy import evaluate
+from .strategy import evaluate as default_strategy
 
 WARMUP = 30
+WINDOW = 300  # candles enviados a estrategia a cada passo
 
 
 @dataclass
@@ -56,13 +57,13 @@ def _exit_price(side: str, stop: float, target: float, c: Candle) -> float | Non
 
 
 def run(symbol: str, candles: list[Candle], capital: float = 1000.0,
-        risk_pct: float = 0.5, fee_pct: float = 0.1) -> Result:
+        risk_pct: float = 0.5, fee_pct: float = 0.1, strategy=default_strategy) -> Result:
     equity = start = capital
     peak, max_dd = equity, 0.0
     trades: list[Trade] = []
     i = WARMUP
     while i < len(candles) - 1:
-        sig = evaluate(symbol, candles[: i + 1])
+        sig = strategy(symbol, candles[max(0, i + 1 - WINDOW): i + 1])
         if not sig:
             i += 1
             continue
