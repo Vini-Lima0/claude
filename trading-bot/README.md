@@ -30,3 +30,13 @@ Sem Telegram configurado, os alertas aparecem no terminal.
 4. Automatico em conta real so apos validacao longa e com valores pequenos.
 
 A estrategia de exemplo nao tem lucratividade comprovada. Day trade envolve risco real de perda.
+
+## Backtest
+
+```bash
+PYTHONPATH=src python -m tradingbot.backtest_cli BTCUSDT 5m --n 5000
+PYTHONPATH=src python -m tradingbot.backtest_cli WINZ25 5m --csv historico.csv   # CSV: open_time,open,high,low,close,volume
+```
+
+Entra na abertura do candle seguinte ao sinal, desconta taxa de 0,1% por lado e, se stop e alvo
+forem tocados no mesmo candle, assume o stop.
