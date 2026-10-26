@@ -1,4 +1,4 @@
-"""Uso: python -m tradingbot.backtest_cli BTCUSDT 5m [--csv arquivo.csv] [--n 5000]"""
+"""Uso: python -m tradingbot.backtest_cli BTCUSDT 5m [--csv arquivo.csv] [--n 5000] [--fee 0.1]"""
 import argparse
 
 from . import backtest
@@ -13,10 +13,11 @@ def main() -> None:
     p.add_argument("--n", type=int, default=5000)
     p.add_argument("--capital", type=float, default=1000)
     p.add_argument("--risk", type=float, default=0.5)
+    p.add_argument("--fee", type=float, default=0.1, help="taxa por lado, em %% (padrao 0.1)")
     a = p.parse_args()
     candles = load_csv(a.csv) if a.csv else fetch_history(a.symbol, a.interval, a.n)
     print(f"{len(candles)} candles")
-    print(backtest.run(a.symbol, candles, a.capital, a.risk).summary())
+    print(backtest.run(a.symbol, candles, a.capital, a.risk, a.fee).summary())
 
 
 if __name__ == "__main__":
